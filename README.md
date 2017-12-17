@@ -37,7 +37,7 @@ Let’s look at an example for getting the name of a track. We know that, accord
 
 I can’t seem to find an index for looking up the location of rows, and rows don’t seem to have any data indicating the total row size. Therefore, to iterate over rows, you must first seek to the end of the current row (by finding the last string and it’s size). Rows are not tightly packed, and tend to be padded with null bytes (Need to confirm this as I think I had one instance where these bytes were not zero). Once you have found the end of a row, you can keep reading bytes whilst they are zero, or keep reading until you find a valid row header.
 
-Also, you will find that there are often duplicate rows. If you edit data for a track in Recordbox, it will often add a new row to the .pdb file rather than modifying the existing one. This means that, in order to get a row, you have to find all of the rows with the same id first, and then use the last one.
+Also, you will find that there are often duplicate rows. If you edit data for a track in Recordbox, it will often add a new row to the .pdb file rather than modifying the existing one. This means that, in order to get a row, you have to find all of the rows with the same id first, and then use the last one. 
 
 
 # Table Schemas
@@ -83,3 +83,7 @@ Todo...
 
 ## Albums
 Todo...
+
+
+# Code Examples
+See exmample-parse for a very basic example of how to parse a pdb file.

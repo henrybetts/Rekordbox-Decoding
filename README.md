@@ -27,7 +27,7 @@ The bytes at 0x20 and 0x22 tend to add up to the number of rows in the block.
 
 Each row can be broken into three sections; a four byte header, followed by the fixed size column data, followed by variable sized string data.
 
-The first two bytes of the header indicate the table that the row belongs to. So each table has a unique two byte id. The next two bytes seem to represent an index, or an id for rows within just that block; The first row in a block will have value 0x0000, and successive rows will increase by 0x20000 each time.
+The first two bytes of the header indicate the table that the row belongs to. So each table has a unique two byte id. The next two bytes seem to represent an index, or an id for rows within just that block; The first row in a block will have value 0x00, and successive rows will increase by 0x20 each time.
 
 The second section contains the actual column data. The data is always stored in the same order for rows in the same table, so if you know the table schema, you can easily locate the value for a given column. Whilst this section does not contain actual string data, it does provide the location of strings, relative to the start of the row.
 
@@ -45,8 +45,8 @@ Also, you will find that there are often duplicate rows. If you edit data for a 
 ## Tracks
 | Location    | Data type | Description                          |
 | --------    | --------- | -----------                          |
-| 0x00	      | uint16    | Table ID = 0x2400                    |
-| 0x02	      | uint16	  | Count / Row ID (increases by 0x2000) |
+| 0x00	      | uint16    | Table ID = 0x24                      |
+| 0x02	      | uint16	  | Count / Row ID (increases by 0x20)   |
 | 0x04 - 0x07 |           | Unknown                              |
 | 0x08        | uint32    | Sample Rate                          |
 | 0x0c - 0x13 |		        | Unknown                              |

@@ -19,19 +19,30 @@ struct PDBBlockHeader {
     unsigned char x19[15];
 };
 
-#define PDBTrackID 0x0024
+#define PDBTrackID 0x24
 
 struct PDBTrack {
     uint32_t header;
     unsigned char x04[4];
     uint32_t sampleRate;
-    unsigned char x0c[8];
+    uint32_t composer;
+    uint32_t fileSize;
     uint32_t id;
-    unsigned char x18[28];
-    uint16_t trackNumber;
-    unsigned char x36[22];
+    unsigned char x18[12];
+    uint32_t originalArtist;
+    unsigned char x28[4];
+    uint32_t remixer;
+    uint32_t bitrate;
+    uint32_t trackNumber;
+    unsigned char x38[8];
+    uint32_t album;
+    uint32_t artist;
+    unsigned char x48[4];
     uint16_t discNumber;
-    unsigned char x4[16];
+    uint16_t playCount;
+    unsigned char x50[4];
+    uint16_t duration;
+    unsigned char x56[8];
     
     uint16_t x5e;
     uint16_t str_lyricist;

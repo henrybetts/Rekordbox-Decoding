@@ -37,7 +37,7 @@ Let’s look at an example for getting the name of a track. We know that, accord
 
 I can’t seem to find an index for looking up the location of rows, and rows don’t seem to have any data indicating the total row size. Therefore, to iterate over rows, you must first seek to the end of the current row (by finding the last string and it’s size). Rows are not tightly packed, and tend to be padded with null bytes (Need to confirm this as I think I had one instance where these bytes were not zero). Once you have found the end of a row, you can keep reading bytes whilst they are zero, or keep reading until you find a valid row header.
 
-Also, you will find that there are often duplicate rows. If you edit data for a track in Recordbox, it will often add a new row to the .pdb file rather than modifying the existing one. This means that, in order to get a row, you have to find all of the rows with the same id first, and then use the last one. 
+Also, you will find that there are often duplicate rows. If you edit data for a track in Recordbox, it will often add a new row to the .pdb file rather than modifying the existing one. This means that, in order to get a row, you have to find all of the rows with the same id first, and then use the last one.
 
 
 # Table Schemas
@@ -49,21 +49,32 @@ Also, you will find that there are often duplicate rows. If you edit data for a 
 | 0x02	      | uint16	  | Count / Row ID (increases by 0x20)   |
 | 0x04 - 0x07 |           | Unknown                              |
 | 0x08        | uint32    | Sample Rate                          |
-| 0x0c - 0x13 |		        | Unknown                              |
+| 0x0c        | uint32    | Composer (Artist ID)                 |
+| 0x10        | uint32    | File size (bytes)                    |
 | 0x14        |	uint32	  | Track ID                             |
-| 0x18 - 0x33 |	          | Unknown                              |
-| 0x34        | uint16    | Track number (could be uint32)       |
-| 0x36 - 0x4b |           |	Unknown                              |
+| 0x18 - 0x23 |	          | Unknown                              |
+| 0x24        | uint32    | Original artist (Artist ID)          |
+| 0x28 - 0x2b |           | Unknown                              |
+| 0x2c        | uint32    | Remixer (Artist ID)                  |
+| 0x30        | uint32    | Bitrate (kbps)                       |
+| 0x34        | uint32    | Track number                         |
+| 0x38 - 0x3f |           |	Unknown                              |
+| 0x40        | uint32    | Album (Album ID)                     |
+| 0x44        | uint32    | Artist (Artist ID)                   |
+| 0x48 - 0x4b |           | Unknown                              |
 | 0x4c        |	uint16    |	Disc number                          |
-| 0x4e - 0x5d	|	          | Unknown                              |
+| 0x4e        | uint16    | Play count                           |
+| 0x50 - 0x53	|	          | Unknown                              |
+| 0x54        | uint16    | Duration (seconds)                   |
+| 0x56 - 0x5d |           | Unknown                              |
 | 0x5e        |	uint16	  | ? (string location)                  |
 | 0x60        |	uint16    |	Lyricist (string location)           |
 | 0x62        |	uint16    |	? (string location)                  |
 | 0x64	      | uint16    | ? (string location)                  |
 | 0x66	      | uint16    | ? (string location)                  |
 | 0x68	      | uint16	  | KUVO (string location)               |
-| 0x6a	      | uint16	  | ? ON/OFF (string location)           |
-| 0x6c	      | uint16	  | ? ON/OFF (string location)           |
+| 0x6a	      | uint16	  | Public (string location)             |
+| 0x6c	      | uint16	  | Autoload HotCue (string location)    |
 | 0x6e	      | uint16	  | ? (string location)                  |
 | 0x70	      | uint16	  | ? (string location)                  |
 | 0x72	      | uint16	  | Date (string location)               |
@@ -86,4 +97,4 @@ Todo...
 
 
 # Code Examples
-See exmample-parse for a very basic example of how to parse a pdb file.
+See example-parse for a very basic example of how to parse a pdb file.

@@ -8,7 +8,7 @@ The .pdb file is a relational database. It’s data is organised into tables of 
 
 The file consists of fixed size blocks of 4096 bytes. I have not yet managed to decode the data in the first block, although the 4 byte integer at 0x04 is always 4096, so this probably defines the block size. Integers are stored in little endian format.
 
-The remaining blocks each consist of a 40 byte header, followed by some row data. The rows within a block all seem to belong to the same table, though a block might not contain all of the rows for a table, since the block has a fixed size. Therefore, large tables will be split across multiple blocks.
+The remaining blocks each consist of a 40 byte header, followed by a body of row data. At the end of the block, there is a variable sized footer. The rows within a block all seem to belong to the same table, though a block might not contain all of the rows for a table, since the block has a fixed size. Therefore, large tables will be split across multiple blocks.
 
 Here’s what I’ve decoded from the 40 byte header so far:
 
@@ -18,10 +18,27 @@ Here’s what I’ve decoded from the 40 byte header so far:
 | 0x04        | uint32    | Block id / index        |
 | 0x08 - 0x17 |           | Unknown                 |
 | 0x18        | uint8     | Number of rows in block |
-| 0x19 - 0x27 |           | Unknown                 |
+| 0x19        | uint8     | Next row id?            |
+| 0x1a - 0x1b |           | Unknown                 |
+| 0x1c        | uint16    | Remaining bytes in block|
+| 0x1e        | uint16    | Size of data in block   |
+| 0x20 - 0x27 |           | Unknown                 |
 
 The bytes at 0x20 and 0x22 tend to add up to the number of rows in the block.
 
+The block footer contains the locations of the rows within the block. These are stored as uint16. The footer ends with four bytes which I have not yet decoded.
+
+For example, in a block that contains 4 rows, the footer will look something like this:
+
+```
++---------------------------------------------+
+| 54 00 | 3C 00 | 1C 00 | 00 00 | 1F 00 10 00 |
++-------+-------+-------+-------+-------------+
+| Row 4 | Row 3 | Row 2 | Row 1 | Unknown     |
++---------------------------------------------+
+```
+
+This tells us that the first row is located at byte offset 0, and the second row at 28 etc. These locations are relative to the block body, so we need to add 40 (header size) to get the location relative to the start of the block.
 
 # Row Structure
 

@@ -53,34 +53,26 @@ int main(int argc, const char * argv[]) {
         struct PDBBlockHeader blockHeader;
         memcpy(&blockHeader, buffer, 40);
         
-        //for now, let's just get blocks that contain tracks
-        if (*(uint16_t*)(&buffer[40]) == PDBTrackID){
+        //iterate over rows
+        for (int i=0; i<blockHeader.numRows; i++){
+        
+            //find location of row
+            uint16_t rowPosition = *(uint16_t*)(&buffer[4090-(i*2)]) + 40;
+            unsigned char* row = &buffer[rowPosition];
             
-            int currentRowIdx = 0;
-            int currentPos = 40;
+            uint16_t rowType = *(uint16_t*)row;
             
-            //iterate over rows
-            while (currentRowIdx < blockHeader.numRows && currentPos < 4096){
-                
-                //skip null padding bytes
-                if (*(uint16_t*)(&buffer[currentPos]) != PDBTrackID){
-                    currentPos++;
-                    continue;
-                }
-                
+            if (rowType == PDBTrackID){
+            
                 //read track data
                 struct PDBTrack track;
-                memcpy(&track, &buffer[currentPos], sizeof(track));
+                memcpy(&track, row, sizeof(track));
                 
-                char* trackName = pdb_copyString(&buffer[currentPos], track.str_name);
+                char* trackName = pdb_copyString(row, track.str_name);
                 
                 printf("Found track: %s (id=%i)\n", trackName, track.id);
                 
                 free(trackName);
-                
-                //go to the end of the row (position of last string plus it's size)
-                currentPos += track.str_filepath + pdb_getStringLength(&buffer[currentPos], track.str_filepath) + 1;
-                currentRowIdx++;
                 
             }
             

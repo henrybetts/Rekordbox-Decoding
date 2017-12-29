@@ -16,7 +16,10 @@ struct PDBBlockHeader {
     uint32_t index;
     unsigned char x08[16];
     uint8_t numRows;
-    unsigned char x19[15];
+    unsigned char x19[3];
+    uint16_t remainingBytes;
+    uint16_t filledBytes;
+    unsigned char x20[8];
 };
 
 #define PDBTrackID 0x24

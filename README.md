@@ -1,3 +1,6 @@
+### Update 2020-03-25
+Unfortunately, I was never able to finish this project. Fortunately, [James Elliott](https://github.com/brunchboy) has produced some fantastic documentation on the subject. Check out his work over at the [crate-digger](https://github.com/Deep-Symmetry/crate-digger) repo.
+
 # Introduction
 This document attempts to describe the format of the Pioneer .pdb database file, which can be found on removable storage devices that have been synced with RecordBox. The .edb file, found on the host RecordBox system has a different format, though the database schema seems to be the same.
 
